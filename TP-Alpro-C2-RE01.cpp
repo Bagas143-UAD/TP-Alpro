@@ -27,11 +27,11 @@ int itemCount = 0;
 
 void input() {
     if (itemCount >= MAX_ITEMS) {
-        cout << "\n? Gagal menambahkan barang, kapasitas penuh!\n";
+        cout << "\n Gagal menambahkan barang, kapasitas penuh!\n";
         return;
     }
 
-    cout << "\n?? Tambah Barang Baru\n";
+    cout << "\n Tambah Barang Baru\n";
     items[itemCount].id = itemCount + 1;
     cout << "Nama barang  : ";
     cin.ignore();
@@ -47,11 +47,11 @@ void input() {
 
 void tampilan() {
     if (itemCount == 0) {
-        cout << "\n?? Tidak ada barang yang tersedia.\n";
+        cout << "\n Tidak ada barang yang tersedia.\n";
         return;
     }
 
-    cout << "\n?? Daftar Barang\n";
+    cout << "\n Daftar Barang\n";
     cout << left << setw(5) << "ID" << setw(20) << "Nama" << setw(10) << "Harga" << setw(10) << "Stok" << endl;
     for (int i = 0; i < itemCount; i++) {
         cout << left << setw(5) << items[i].id
@@ -64,7 +64,7 @@ void tampilan() {
 void simpan() {
     ofstream file("items.txt");
     if (!file) {
-        cout << "\n? Gagal membuka file untuk menyimpan data.\n";
+        cout << "\n Gagal membuka file untuk menyimpan data.\n";
         return;
     }
 
@@ -73,13 +73,13 @@ void simpan() {
     }
 
     file.close();
-    cout << "\n?? Data barang berhasil disimpan ke file!\n";
+    cout << "\n Data barang berhasil disimpan ke file!\n";
 }
 
 void tutup() {
     ifstream file("items.txt");
     if (!file) {
-        cout << "\n?? File data tidak ditemukan, mulai dengan data kosong.\n";
+        cout << "\n File data tidak ditemukan, mulai dengan data kosong.\n";
         return;
     }
 
@@ -103,39 +103,51 @@ void tutup() {
     }
 
     file.close();
-    cout << "\n? Data barang berhasil dimuat dari file!\n";
+    cout << "\n Data barang berhasil dimuat dari file!\n";
+}
+double hitungDiskon(double total) {
+    if (total >= 100000) return total * 0.10; // 10% diskon
+    else if (total >= 50000) return total * 0.05; // 5% diskon
+    else return 0;
 }
 
 void jual() {
     if (itemCount == 0) {
-        cout << "\n?? Tidak ada barang yang tersedia untuk dijual.\n";
+        cout << "\n Tidak ada barang yang tersedia untuk dijual.\n";
         return;
     }
 
     int id, quantity;
     tampilan();
-    cout << "\n?? Masukkan ID barang yang ingin dibeli: ";
+    cout << "\n Masukkan ID barang yang ingin dibeli: ";
     cin >> id;
     cout << "Jumlah yang ingin dibeli: ";
     cin >> quantity;
 
     if (id < 1 || id > itemCount) {
-        cout << "\n? ID barang tidak valid.\n";
+        cout << "\n ID barang tidak valid.\n";
         return;
     }
 
     if (items[id - 1].stock < quantity) {
-        cout << "\n? Stok barang tidak mencukupi.\n";
+        cout << "\n Stok barang tidak mencukupi.\n";
         return;
     }
 
-    items[id - 1].stock -= quantity;
-    double total = quantity * items[id - 1].harga;
-    cout << "\n? Transaksi berhasil!\nTotal harga: Rp" << fixed << setprecision(2) << total << endl;
+   items[id - 1].stock -= quantity;
+double total = quantity * items[id - 1].harga;
+double diskon = hitungDiskon(total);
+double bayar = total - diskon;
+
+cout << "\n Transaksi berhasil!\n";
+cout << "Total harga    : Rp" << fixed << setprecision(2) << total << endl;
+cout << "Diskon         : Rp" << diskon << endl;
+cout << "Total dibayar  : Rp" << bayar << endl;
+
 }
 
 void laporan_stok_rendah() {
-    cout << "\n?? Barang dengan stok rendah (<= 5):\n";
+    cout << "\n Barang dengan stok rendah (<= 5):\n";
     bool ada = false;
     for (int i = 0; i < itemCount; i++) {
         if (items[i].stock <= 5) {
@@ -159,7 +171,7 @@ void laporan_harga_tertinggi() {
         if (items[i].harga > max->harga)
             max = &items[i];
     }
-    cout << "\n?? Barang dengan harga tertinggi:\n";
+    cout << "\n Barang dengan harga tertinggi:\n";
     cout << "ID: " << max->id << ", Nama: " << max->nama << ", Harga: Rp" << max->harga << ", Stok: " << max->stock << endl;
 }
 
@@ -168,13 +180,13 @@ void laporan_total_inventaris() {
     for (int i = 0; i < itemCount; i++) {
         total += items[i].harga * items[i].stock;
     }
-    cout << "\n?? Total nilai inventaris: Rp" << total << endl;
+    cout << "\n Total nilai inventaris: Rp" << total << endl;
 }
 
 void laporanMenu() {
     fitur menu;
     do {
-        cout << "\n?? Menu Laporan:\n";
+        cout << "\n Menu Laporan:\n";
         cout << "1. Barang Stok Rendah\n";
         cout << "2. Harga Tertinggi\n";
         cout << "3. Total Inventaris\n";
@@ -206,9 +218,9 @@ void resetData() {
     cin >> confirm;
     if (confirm == 'y' || confirm == 'Y') {
         itemCount = 0;
-        cout << "? Semua data dihapus.\n";
+        cout << " Semua data dihapus.\n";
     } else {
-        cout << "? Aksi dibatalkan.\n";
+        cout << " Aksi dibatalkan.\n";
     }
 }
 
@@ -246,7 +258,7 @@ void ubahStok() {
 void pengaturanMenu() {
     fitur menu;
     do {
-        cout << "\n?? Menu Pengaturan:\n";
+        cout << "\n Menu Pengaturan:\n";
         cout << "1. Reset Semua Data\n";
         cout << "2. Ubah Harga Barang\n";
         cout << "3. Ubah Stok Barang\n";
@@ -272,7 +284,7 @@ void pengaturanMenu() {
 }
 
 void bantuanMenu() {
-    cout << "\n?? Bantuan Pengguna:\n";
+    cout << "\n Bantuan Pengguna:\n";
     cout << "- Gunakan angka untuk memilih menu.\n";
     cout << "- Semua data akan disimpan secara otomatis saat keluar.\n";
     cout << "- Simpan file 'items.txt' agar data tidak hilang.\n";
@@ -281,7 +293,7 @@ void bantuanMenu() {
 void tampilanadmin(){
 	fitur menu;
     do {
-        cout << "\n??=== Sistem Manajemen Toko Swalayan ===??\n";
+        cout << "\n=== Sistem Manajemen Toko Swalayan ===??\n";
         cout << "1. Tambah Barang\n";
         cout << "2. Lihat Barang\n";
         cout << "3. Jual Barang\n";
@@ -304,7 +316,7 @@ void tampilanadmin(){
 				break;
             case 4: 
 				simpan(); 
-				cout << "?? Terima kasih telah menggunakan aplikasi.\n"; 
+				cout << " Terima kasih telah menggunakan aplikasi.\n"; 
 				break;
             case 5: 
 				laporanMenu(); 
@@ -316,10 +328,110 @@ void tampilanadmin(){
 				bantuanMenu(); 
 				break;
             default: 
-				cout << "? Pilihan tidak valid.\n";
+				cout << " Pilihan tidak valid.\n";
         }
     } while (menu.pilih != 4);
+    
 }
+
+
+
+void beliBarang() {
+    if (itemCount == 0) {
+        cout << "\n Tidak ada barang yang tersedia untuk dibeli.\n";
+        return;
+    }
+    
+
+    int id, quantity;
+    tampilan(); 
+    cout << "\n Masukkan ID barang yang ingin dibeli: ";
+    cin >> id;
+    cout << "Jumlah yang ingin dibeli: ";
+    cin >> quantity;
+
+    if (id < 1 || id > itemCount) {
+        cout << "\n ID barang tidak valid.\n";
+        return;
+    }
+
+    if (items[id - 1].stock < quantity) {
+        cout << "\n Maaf, stok tidak mencukupi.\n";
+        return;
+    }
+
+    items[id - 1].stock -= quantity;
+double total = items[id - 1].harga * quantity;
+double diskon = hitungDiskon(total);
+double bayar = total - diskon;
+
+cout << "\n >>> Pembelian berhasil!\n";
+cout << "Total harga    : Rp" << fixed << setprecision(2) << total << endl;
+cout << "Diskon         : Rp" << diskon << endl;
+cout << "Total dibayar  : Rp" << bayar << endl;
+
+}
+
+void cariProduk() {
+    string keyword;
+    cin.ignore(); 
+    cout << ">>> Masukkan kata kunci nama produk: ";
+    getline(cin, keyword);
+
+    bool ditemukan = false;
+    cout << "\nHasil Pencarian:\n";
+    cout << left << setw(5) << "ID" 
+         << setw(20) << "Nama" 
+         << setw(10) << "Harga" 
+         << setw(10) << "Stok" << endl;
+    
+    for (int i = 0; i < itemCount; i++) {
+        
+        if (items[i].nama.find(keyword) != string::npos) {
+            cout << left << setw(5) << items[i].id
+                 << setw(20) << items[i].nama
+                 << setw(10) << items[i].harga
+                 << setw(10) << items[i].stock << endl;
+            ditemukan = true;
+        }
+    }
+
+    if (!ditemukan) {
+        cout << ">>> Produk tidak ditemukan.\n";
+    }
+}
+void tampilanUser() {
+    fitur menu;
+    do {
+        cout << "\n=== Menu User ===\n";
+        cout << "1. Lihat Barang\n";
+        cout << "2. Cari Barang\n";
+        cout << "3. Beli Barang\n";
+        cout << "4. Kembali\n";
+        cout << "Pilih menu: ";
+        cin >> menu.pilih;
+
+        switch (menu.pilih) {
+            case 1:
+                tampilan(); 
+                break;
+            case 2:
+                cariProduk(); 
+                break;
+            case 3:
+                beliBarang(); 
+                break;
+            case 4:
+                return;
+            default:
+                cout << "Pilihan tidak valid.\n";
+        }
+    } while (true);
+}
+
+
+
+
 
 void garis(){
 	for(int i=0; i<=20; i++){
@@ -332,6 +444,7 @@ void password(){
 	fitur sandi;
 	
 	cout<<endl;
+	
 	cout<<"======= LOGIN =======";
 	cout<<endl;
 	cout<<"Nama Pengguna : "; cin>>sandi.admin;
@@ -380,10 +493,11 @@ int main() {
             	system("cls");
 				password(); 
 				break;
-            case 2: 
-				cout << ">>> Fitur layanan belum tersedia.";
-				cout<<endl; 
-				break;
+           case 2:
+   				 system("cls");
+   				 tampilanUser(); 
+    			break;
+
             case 3: 
 				cout << ">>> Terima kasih telah menggunakan sistem.";
 				cout<<endl; 
