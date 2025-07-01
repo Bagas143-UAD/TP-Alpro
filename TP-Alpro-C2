@@ -15,7 +15,7 @@ struct fitur{
 	string admin; 
 	string nama[3]={"Ian", "Bagas", "Zeicha"};
 	double pass;
-	double pin[3]={2400018124, 2400018143, 2400018148};
+	double pin[3]={124, 143, 148};
 };
 
 struct Item {
@@ -273,7 +273,8 @@ void laporanMenu() {
         cout << "5. Kembali\n";
         cout << "Pilihan: ";
         cin >> menu.pilih;
-
+		system("cls");
+	
         switch (menu.pilih) {
             case 1: 
 				laporan_stok_rendah(); 
@@ -291,6 +292,7 @@ void laporanMenu() {
 				return;
             default: 
 				cout << "Pilihan tidak valid.\n";
+				
         }
     } 
 	while (true);
@@ -488,43 +490,35 @@ void tampilanadmin(){
         cout << "8. Bantuan\n";
         cout << "Pilih menu: ";
         cin >> menu.pilih;
+        system("cls");
 
         switch (menu.pilih) {
             case 1: 
-            	system("cls");
 				input(); 
 				break;
-            case 2:
-				system("cls"); 
+            case 2: 
 				tampilan(); 
 				break;
             case 3: 
-            	system("cls");
 				jual(); 
 				break;
             case 4: 
-            	system("cls");
 				simpan(); 
 				cout << " Terima kasih telah menggunakan aplikasi.\n"; 
 				break;
             case 5: 
-            	system("cls");
 				laporanMenu(); 
 				break;
 			case 6:
-				system("cls");
   				lihatUlasan();
     			break;
             case 7: 
-            	system("cls");
 				pengaturanMenu(); 
 				break;
             case 8: 
-            	system("cls");
 				bantuanMenu(); 
 				break;
             default: 
-            	system("cls");
 				cout << " Pilihan tidak valid.\n";
         }
     } while (menu.pilih != 4);
@@ -796,6 +790,7 @@ void tampilkanBarangBaru() {
 }
 
 
+
 void returBarang() {
     if (itemCount == 0) {
         cout << "Belum ada barang untuk diretur.\n";
@@ -856,7 +851,7 @@ void returBarang() {
 
     file.close();
 
-    cout << ">> Retur barang berhasil dicatat dan stok diperbarui!\n";
+    cout << "? Retur barang berhasil dicatat dan stok diperbarui!\n";
 }
 
 
@@ -870,7 +865,7 @@ void tampilanUser() {
         cout << "3. Lihat Barang Baru Ditambahkan\n";
         cout << "4. Beli Barang\n";
         cout << "5. Pembelian Tambahan\n";
-        cout << "6. Keranjang Belanja\n";
+        cout << "6. Keranjang Belanja\n"; //ini
         cout << "7. Riwayat pembelian\n";
         cout << "8. Tulis Ulasan Produk\n";
 		cout << "9. Retur Barang\n";
@@ -882,50 +877,46 @@ void tampilanUser() {
 
         switch (menu.pilih) {
             case 1:
-            	system("cls");
                 tampilan(); 
                 break;
             case 2:
-                system("cls");
-				cariProduk(); 
+                cariProduk(); 
                 break;
             case 3:
-            	system("cls");
     			tampilkanBarangBaru();
   				break;
             case 4:
-            	system("cls");
                 beliBarangUserMulti(); 
                 break;
             case 5:
-            	system("cls");
 			    pembelianTambahanUser();
    				break;
 			case 6:
-				system("cls");
     			keranjangBelanjaUser();
     			break;   
             case 7:
-            	system("cls");
             	riwayatPembelian();
             	break;
             case 8:
-            	system("cls");
    				tambahUlasan();
     			break;
 			case 9:
-				system("cls");
    				returBarang();
    				break;
             case 10:
-            	system("cls");
    			   return;
+   			
+
+
+                
             default:
-            	system("cls");
                 cout << "Pilihan tidak valid.\n";
         }
     } while (true);
 }
+
+
+
 
 
 void garis(){
@@ -998,12 +989,10 @@ int main() {
     			break;
 
             case 3: 
-            	system("cls");
 				cout << ">>> Terima kasih telah menggunakan sistem.";
 				cout<<endl; 
 				break;
             default: 
-            	system("cls");
 				cout << ">>> Pilihan tidak valid!";
 				cout<<endl; 
 				break;
