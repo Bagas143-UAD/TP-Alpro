@@ -5,6 +5,8 @@
 #include <ctime>
 #include <cstdlib> 
 #include <map>
+#include <vector> 
+#include <algorithm>
 
 using namespace std;
 
@@ -33,6 +35,15 @@ struct Retur {
 
 Item items[MAX_ITEMS];
 int itemCount = 0;
+
+
+bool bandingkanNama(const Item& a, const Item& b) {
+    return a.nama < b.nama;
+}
+
+bool bandingkanHarga(const Item& a, const Item& b) {
+    return a.harga < b.harga;
+}
 
 void input() {
     if (itemCount >= MAX_ITEMS) {
@@ -67,6 +78,51 @@ void tampilan() {
              << setw(20) << items[i].nama
              << setw(10) << items[i].harga
              << setw(10) << items[i].stock << endl;
+    }
+}
+
+void tampilanTerurut() {
+    if (itemCount == 0) {
+        cout << "\nTidak ada barang yang tersedia untuk diurutkan.\n";
+        return;
+    }
+
+    vector<Item> itemsCopy;
+    for (int i = 0; i < itemCount; i++) {
+        itemsCopy.push_back(items[i]);
+    }
+
+    int pilihan;
+    cout << "\nUrutkan barang berdasarkan:\n";
+    cout << "1. Nama (A-Z)\n";
+    cout << "2. Harga (Termurah ke Termahal)\n";
+    cout << "3. Kembali\n";
+    cout << "Pilihan: ";
+    cin >> pilihan;
+
+    switch (pilihan) {
+        case 1:
+            sort(itemsCopy.begin(), itemsCopy.end(), bandingkanNama);
+            cout << "\n--- Daftar Barang Terurut Berdasarkan Nama ---\n";
+            break;
+        case 2:
+            sort(itemsCopy.begin(), itemsCopy.end(), bandingkanHarga);
+            cout << "\n--- Daftar Barang Terurut Berdasarkan Harga ---\n";
+            break;
+        case 3:
+            return; 
+        default:
+            cout << "Pilihan tidak valid.\n";
+            return;
+    }
+
+   
+    cout << left << setw(5) << "ID" << setw(20) << "Nama" << setw(10) << "Harga" << setw(10) << "Stok" << endl;
+    for (size_t i = 0; i < itemsCopy.size(); i++) {
+        cout << left << setw(5) << itemsCopy[i].id
+             << setw(20) << itemsCopy[i].nama
+             << setw(10) << itemsCopy[i].harga
+             << setw(10) << itemsCopy[i].stock << endl;
     }
 }
 
@@ -114,9 +170,10 @@ void tutup() {
     file.close();
     cout << "\n Data barang berhasil dimuat dari file!\n";
 }
+
 double hitungDiskon(double total) {
-    if (total >= 100000) return total * 0.10; // 10% diskon
-    else if (total >= 50000) return total * 0.05; // 5% diskon
+    if (total >= 100000) return total * 0.10; 
+    else if (total >= 50000) return total * 0.05; 
     else return 0;
 }
 
@@ -213,7 +270,6 @@ void laporan_total_inventaris() {
     cout << "\n Total nilai inventaris: Rp" << total << endl;
 }
 
-
 void statistikPenjualan() {
     ifstream file("pembelian.txt");
     if (!file) {
@@ -260,7 +316,6 @@ void statistikPenjualan() {
 	}
 	
 }
-
 
 void laporanMenu() {
     fitur menu;
@@ -475,56 +530,6 @@ void pembelianTambahanUser() {
     log.close();
 }
 
-
-void tampilanadmin(){
-	fitur menu;
-    do {
-        cout << "\n=== Sistem Manajemen Toko Swalayan ===\n";
-        cout << "1. Tambah Barang\n";
-        cout << "2. Lihat Barang\n";
-        cout << "3. Jual Barang\n";
-        cout << "4. Simpan & Keluar\n";
-        cout << "5. Laporan\n";
-        cout << "6. Lihat Ulasan Produk\n";
-        cout << "7. Pengaturan\n";
-        cout << "8. Bantuan\n";
-        cout << "Pilih menu: ";
-        cin >> menu.pilih;
-        system("cls");
-
-        switch (menu.pilih) {
-            case 1: 
-				input(); 
-				break;
-            case 2: 
-				tampilan(); 
-				break;
-            case 3: 
-				jual(); 
-				break;
-            case 4: 
-				simpan(); 
-				cout << " Terima kasih telah menggunakan aplikasi.\n"; 
-				break;
-            case 5: 
-				laporanMenu(); 
-				break;
-			case 6:
-  				lihatUlasan();
-    			break;
-            case 7: 
-				pengaturanMenu(); 
-				break;
-            case 8: 
-				bantuanMenu(); 
-				break;
-            default: 
-				cout << " Pilihan tidak valid.\n";
-        }
-    } while (menu.pilih != 4);
-    
-}
-
 void beliBarangUserMulti() {
     if (itemCount == 0) {
         cout << "\n Tidak ada barang tersedia.\n";
@@ -700,7 +705,6 @@ void keranjangBelanjaUser() {
     log.close();
 }
 
-
 void riwayatPembelian() {
     ifstream log("pembelian.txt");
     if (!log) {
@@ -740,9 +744,8 @@ void tambahUlasan() {
     file << "--------------------------\n";
 
     file.close();
-    cout << "? Ulasan berhasil disimpan!\n";
+    cout << ">>> Ulasan berhasil disimpan!\n";
 }
-
 
 void cariProduk() {
     string keyword;
@@ -788,8 +791,6 @@ void tampilkanBarangBaru() {
              << setw(10) << items[i].stock << endl;
     }
 }
-
-
 
 void returBarang() {
     if (itemCount == 0) {
@@ -851,73 +852,8 @@ void returBarang() {
 
     file.close();
 
-    cout << "? Retur barang berhasil dicatat dan stok diperbarui!\n";
+    cout << ">>> Retur barang berhasil dicatat dan stok diperbarui!\n";
 }
-
-
-void tampilanUser() {
-    fitur menu;
-    tampilkanRekomendasiAcak();
-    do {
-        cout << "\n=== Menu User ===\n";
-        cout << "1. Lihat Barang\n";
-        cout << "2. Cari Barang\n";
-        cout << "3. Lihat Barang Baru Ditambahkan\n";
-        cout << "4. Beli Barang\n";
-        cout << "5. Pembelian Tambahan\n";
-        cout << "6. Keranjang Belanja\n"; //ini
-        cout << "7. Riwayat pembelian\n";
-        cout << "8. Tulis Ulasan Produk\n";
-		cout << "9. Retur Barang\n";
-        cout << "10. Kembali\n";
-        
-
-        cout << "Pilih menu: ";
-        cin >> menu.pilih;
-
-        switch (menu.pilih) {
-            case 1:
-                tampilan(); 
-                break;
-            case 2:
-                cariProduk(); 
-                break;
-            case 3:
-    			tampilkanBarangBaru();
-  				break;
-            case 4:
-                beliBarangUserMulti(); 
-                break;
-            case 5:
-			    pembelianTambahanUser();
-   				break;
-			case 6:
-    			keranjangBelanjaUser();
-    			break;   
-            case 7:
-            	riwayatPembelian();
-            	break;
-            case 8:
-   				tambahUlasan();
-    			break;
-			case 9:
-   				returBarang();
-   				break;
-            case 10:
-   			   return;
-   			
-
-
-                
-            default:
-                cout << "Pilihan tidak valid.\n";
-        }
-    } while (true);
-}
-
-
-
-
 
 void garis(){
 	for(int i=0; i<=20; i++){
@@ -926,37 +862,120 @@ void garis(){
 	cout<<endl;
 }
 
-void password(){
-	fitur sandi;
-	
-	cout<<endl;
-	
-	cout<<"======= LOGIN =======";
-	cout<<endl;
-	cout<<"Nama Pengguna : "; cin>>sandi.admin;
-	cout<<"Pin      	 : "; cin>>sandi.pass;
-	
-	if(sandi.admin==sandi.nama[0] && sandi.pass==sandi.pin[0]){
-		system("cls");
-		cout<<"Selamat datang "<<sandi.nama[0]<<endl;
-		tampilanadmin();
-	}
-	else if(sandi.admin==sandi.nama[1] && sandi.pass==sandi.pin[1]){
-		system("cls");
-		cout<<"Selamat datang "<<sandi.nama[1]<<endl;
-		tampilanadmin();
-	}
-	else if(sandi.admin==sandi.nama[2] && sandi.pass==sandi.pin[2]){
-		system("cls");
-		cout<<"Selamat datang "<<sandi.nama[2]<<endl;
-		tampilanadmin();
-	}
-	else {
-		system("cls");
-		cout<<"Nama atau Pin anda salah!";
-		cout<<endl;
-		password();
-	}
+void tampilanUser() {
+    fitur menu;
+    tampilkanRekomendasiAcak();
+    do {
+        cout << "\n=== Menu User ===\n";
+        cout << "1. Daftar Produk\n";
+        cout << "2. Sorting Produk\n"; // <-- MENU BARU
+        cout << "3. Cari Produk\n";
+        cout << "4. Lihat Produk Baru Ditambahkan\n";
+        cout << "5. Beli Produk\n";
+        cout << "6. Pembelian Tambahan\n";
+        cout << "7. Keranjang Belanja\n";
+        cout << "8. Riwayat pembelian\n";
+        cout << "9. Tulis Ulasan Produk\n";
+        cout << "10. Retur Produk\n";
+        cout << "11. Kembali\n";
+
+        cout << "Pilih menu: ";
+        cin >> menu.pilih;
+
+        switch (menu.pilih) {
+            case 1: tampilan(); break;
+            case 2: tampilanTerurut(); break; // <-- PANGGIL FUNGSI BARU
+            case 3: cariProduk(); break;
+            case 4: tampilkanBarangBaru(); break;
+            case 5: beliBarangUserMulti(); break;
+            case 6: pembelianTambahanUser(); break;
+            case 7: keranjangBelanjaUser(); break;
+            case 8: riwayatPembelian(); break;
+            case 9: tambahUlasan(); break;
+            case 10: returBarang(); break;
+            case 11: return;
+            default: cout << "Pilihan tidak valid.\n";
+        }
+    } while (true);
+}
+
+void tampilanadmin(){
+    fitur menu;
+    do {
+        cout << "\n=== Sistem Manajemen Toko Swalayan ===\n";
+        cout << "1. Tambah Produk\n";
+        cout << "2. Daftar Produk\n";
+        cout << "3. Sorting Produk\n"; // <-- MENU BARU
+        cout << "4. Jual Barang\n";
+        cout << "5. Simpan & Keluar\n";
+        cout << "6. Laporan\n";
+        cout << "7. Lihat Ulasan Produk\n";
+        cout << "8. Pengaturan\n";
+        cout << "9. Bantuan\n";
+        cout << "Pilih menu: ";
+        cin >> menu.pilih;
+        system("cls");
+
+        switch (menu.pilih) {
+            case 1: input(); break;
+            case 2: tampilan(); break;
+            case 3: tampilanTerurut(); break; // <-- PANGGIL FUNGSI BARU
+            case 4: jual(); break;
+            case 5:
+                simpan();
+                cout << " Terima kasih telah menggunakan aplikasi.\n";
+                menu.pilih = 99; // Ubah nilai untuk keluar dari loop
+                break;
+            case 6: laporanMenu(); break;
+            case 7: lihatUlasan(); break;
+            case 8: pengaturanMenu(); break;
+            case 9: bantuanMenu(); break;
+            default: cout << " Pilihan tidak valid.\n";
+        }
+    } while (menu.pilih != 99 && menu.pilih != 5); // Sesuaikan kondisi loop
+}
+
+void password() {
+    fitur sandi;
+    
+    struct Admin {
+        string nama;
+        double pin;
+    };
+
+    Admin admins[3] = {
+        {"Ian", 124},
+        {"Bagas", 143},
+        {"Zeicha", 148}
+    };
+
+    cout << "\n======= LOGIN =======\n";
+    cout << "Nama Pengguna  : "; cin >> sandi.admin;
+    cout << "Pin            : "; cin >> sandi.pass;
+
+    int kiri = 0, kanan = 2;
+    int index = -1;
+    while (kiri <= kanan) {
+        int tengah = (kiri + kanan) / 2;
+        if (sandi.pass == admins[tengah].pin) {
+            index = tengah;
+            break;
+        } else if (sandi.pass < admins[tengah].pin) {
+            kanan = tengah - 1;
+        } else {
+            kiri = tengah + 1;
+        }
+    }
+
+    if (index != -1 && sandi.admin == admins[index].nama) {
+        system("cls");
+        cout << "Selamat datang " << admins[index].nama << endl;
+        tampilanadmin();
+    } else {
+        system("cls");
+        cout << "Nama atau PIN anda salah!\n";
+        password();
+    }
 }
 
 
